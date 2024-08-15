@@ -35,11 +35,11 @@ export default function NoteDetail({ note }: Readonly<{ note: Note }>) {
       const { status } = await updateNote(id, data);
 
       if (!status) {
-        toast.error('Failed to create note', {
+        toast.error('Failed to update note', {
           autoClose: 2000,
         });
       } else {
-        toast.success('Note created successfully', {
+        toast.success('Note updated successfully', {
           autoClose: 2000,
         });
         setIsEditing(false);

@@ -1,5 +1,5 @@
 'use client';
-import { CreateNote, createNoteSchema } from '@/lib/types/note';
+import { NoteSchema, noteSchema } from '@/lib/types/note';
 import {
   Button,
   FormControl,
@@ -70,13 +70,13 @@ function CreateNoteForm({ onClose }: Readonly<CreateNoteFormProps>) {
     handleSubmit,
     register,
     formState: { errors },
-  } = useForm<CreateNote>({
-    resolver: zodResolver(createNoteSchema),
+  } = useForm<NoteSchema>({
+    resolver: zodResolver(noteSchema),
   });
 
   const [isPending, startTransition] = useTransition();
 
-  const handleCreateNote = (data: CreateNote) => {
+  const handleCreateNote = (data: NoteSchema) => {
     startTransition(async () => {
       const { status } = await createNote(data);
 

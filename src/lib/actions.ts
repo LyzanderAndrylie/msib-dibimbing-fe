@@ -2,7 +2,7 @@
 
 import { gql } from '@apollo/client';
 import { getClient } from './apollo/client';
-import { CreateNote } from './types/note';
+import { NoteSchema } from './types/note';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
@@ -13,7 +13,7 @@ type MutationResponse = {
 export async function createNote({
   title,
   body,
-}: CreateNote): Promise<MutationResponse> {
+}: NoteSchema): Promise<MutationResponse> {
   const CREATE_NOTE = gql`
     mutation CreateNote(
       $title: title_String_NotNull_minLength_1!
@@ -41,7 +41,37 @@ export async function createNote({
   }
 }
 
-export async function updateNote() {}
+export async function updateNote(
+  id: string,
+  { title, body }: NoteSchema,
+): Promise<MutationResponse> {
+  const UPDATE_NOTE = gql`
+    mutation UpdateNote(
+      $id: ID!
+      $title: title_String_NotNull_minLength_1!
+      $body: body_String_NotNull_minLength_1!
+    ) {
+      updateNote(id: $id, input: { title: $title, body: $body }) {
+        id
+      }
+    }
+  `;
+
+  try {
+    const { errors } = await getClient().mutate({
+      mutation: UPDATE_NOTE,
+      variables: { id, title, body },
+    });
+
+    if (errors) throw new Error();
+
+    revalidatePath('/notes');
+
+    return { status: true };
+  } catch (error) {
+    return { status: false };
+  }
+}
 
 type deleteNoteOptions = {
   redirect?: string;

@@ -1,8 +1,8 @@
 import ButtonLink from '@/components/ButtonLink';
 import { getNote } from '@/lib/data';
-import { format } from 'date-fns';
+import { Note } from '@/lib/types/note';
 import { IoChevronBackOutline } from 'react-icons/io5';
-import DeleteNoteModal from '@/components/notes/DeleteNoteModal';
+import NoteDetail from '@/components/notes/NoteDetail';
 
 type PageProps = {
   params: {
@@ -28,25 +28,7 @@ export default async function Page({ params: { id } }: Readonly<PageProps>) {
             correct or try again later 🤔.
           </div>
         )}
-        {data.note && (
-          <div className="flex w-full max-w-[600px] flex-1 flex-col gap-2 rounded-md border border-slate-200 p-4 shadow-sm">
-            <div className="flex items-center justify-between text-sm text-slate-600">
-              <h1 className="text-2xl font-bold">{data.note.title}</h1>
-              {format(new Date(data.note.createdAt), 'MMMM d, yyyy')}
-            </div>
-            <p className="flex-1 overflow-y-auto text-slate-600">
-              {data.note.body}
-            </p>
-            <div>
-              <DeleteNoteModal
-                id={id}
-                title={data.note.title}
-                redirect="/notes"
-                size="md"
-              />
-            </div>
-          </div>
-        )}
+        {data.note && <NoteDetail note={data.note as Note} />}
       </div>
     </div>
   );

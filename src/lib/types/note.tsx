@@ -12,7 +12,7 @@ export enum NoteSortOrder {
   desc = 'desc',
 }
 
-export const createNoteSchema = z.object({
+export const noteSchema = z.object({
   title: z
     .string()
     .min(1, 'Title is required and should be at least 1 character'),
@@ -21,4 +21,4 @@ export const createNoteSchema = z.object({
     .min(1, 'Body is required and should be at least 1 character'),
 });
 
-export type CreateNote = z.infer<typeof createNoteSchema>;
+export type NoteSchema = z.infer<typeof noteSchema>;

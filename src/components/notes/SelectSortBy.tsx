@@ -20,6 +20,7 @@ export default function SelectSortBy({ sort }: Readonly<SelectSortByProps>) {
         }}
         defaultValue={sort}
         size="sm"
+        borderColor="#e2e8f0"
       >
         <option value="desc">Newest</option>
         <option value="asc">Oldest</option>

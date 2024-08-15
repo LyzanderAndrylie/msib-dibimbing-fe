@@ -49,9 +49,16 @@ export default async function Page({
                 capture your thoughts!
               </div>
             ) : (
-              data.notes.map((note: Note) => (
-                <NoteCard key={note.id} note={note} />
-              ))
+              data.notes.map((note: Note) => {
+                const currentDate = new Date();
+                const noteCreateDate = new Date(note.createdAt);
+                const oneSecondAgo =
+                  Math.abs(currentDate.getTime() - noteCreateDate.getTime()) <=
+                  1000;
+                return (
+                  <NoteCard key={note.id} note={note} isNew={oneSecondAgo} />
+                );
+              })
             ))}
         </div>
       </div>

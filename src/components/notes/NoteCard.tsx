@@ -10,18 +10,40 @@ import {
 } from '@chakra-ui/react';
 import { format } from 'date-fns';
 import { Link } from '@chakra-ui/next-js';
+import { cn } from '../utils';
+import { useEffect, useRef } from 'react';
 
 type NoteCardProps = {
   note: Note;
+  isNew?: boolean;
 };
 
-export default function NoteCard({ note }: Readonly<NoteCardProps>) {
+export default function NoteCard({ note, isNew }: Readonly<NoteCardProps>) {
+  const ref = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    ref.current?.addEventListener('animationend', () => {
+      ref.current?.classList.remove('animate-bgChange');
+    });
+  }, []);
+
   return (
     <Link
       href={`/notes/${note.id}`}
       className="group block h-full hover:no-underline"
     >
-      <Card className="flex h-full flex-col gap-2 border border-slate-200 p-4 shadow-sm transition-all group-hover:scale-105 group-hover:bg-slate-50">
+      <Card
+        className={cn(
+          'flex h-full flex-col gap-2 p-4 shadow-sm transition-all group-hover:scale-105 group-hover:bg-slate-50',
+          {
+            'animate-bgChange': isNew,
+          },
+        )}
+        ref={ref}
+        variant="unstyled"
+        border="1px"
+        borderColor="#e2e8f0"
+      >
         <CardHeader className="p-0">
           <Heading size="md">{note.title}</Heading>
         </CardHeader>

@@ -16,9 +16,14 @@ import { useEffect, useRef } from 'react';
 type NoteCardProps = {
   note: Note;
   isNew?: boolean;
+  deleteButton?: React.ReactNode;
 };
 
-export default function NoteCard({ note, isNew }: Readonly<NoteCardProps>) {
+export default function NoteCard({
+  note,
+  isNew,
+  deleteButton,
+}: Readonly<NoteCardProps>) {
   const ref = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -45,7 +50,10 @@ export default function NoteCard({ note, isNew }: Readonly<NoteCardProps>) {
         borderColor="#e2e8f0"
       >
         <CardHeader className="p-0">
-          <Heading size="md">{note.title}</Heading>
+          <div className="flex justify-between">
+            <Heading size="md">{note.title}</Heading>
+            {deleteButton}
+          </div>
         </CardHeader>
         <CardBody className="p-0">
           <Text className="line-clamp-6 text-slate-600">{note.body}</Text>

@@ -4,6 +4,7 @@ import { getNotes } from '@/lib/data';
 import { Note, NoteSortOrder } from '@/lib/types/note';
 import SortBySelect from '@/components/notes/SelectSortBy';
 import { cn } from '@/components/utils';
+import DeleteNoteModal from '@/components/notes/DeleteNoteModal';
 
 type PageProps = {
   searchParams?: {
@@ -56,7 +57,18 @@ export default async function Page({
                   Math.abs(currentDate.getTime() - noteCreateDate.getTime()) <=
                   1000;
                 return (
-                  <NoteCard key={note.id} note={note} isNew={oneSecondAgo} />
+                  <NoteCard
+                    key={note.id}
+                    note={note}
+                    isNew={oneSecondAgo}
+                    deleteButton={
+                      <DeleteNoteModal
+                        id={note.id}
+                        title={note.title}
+                        size="sm"
+                      />
+                    }
+                  />
                 );
               })
             ))}

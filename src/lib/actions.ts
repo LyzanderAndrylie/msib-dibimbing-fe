@@ -1,9 +1,10 @@
 'use server';
 
 import { gql } from '@apollo/client';
-import { query, getClient } from './apollo/client';
+import { getClient } from './apollo/client';
 import { CreateNote } from './types/note';
 import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
 
 type MutationResponse = {
   status: boolean;
@@ -42,4 +43,38 @@ export async function createNote({
 
 export async function updateNote() {}
 
-export async function deleteNote() {}
+type deleteNoteOptions = {
+  redirect?: string;
+};
+
+export async function deleteNote(
+  id: string,
+  options?: deleteNoteOptions,
+): Promise<MutationResponse> {
+  const DELETE_NOTE = gql`
+    mutation DeleteNote($id: ID!) {
+      deleteNote(id: $id) {
+        id
+      }
+    }
+  `;
+
+  let result;
+  try {
+    result = await getClient().mutate({
+      mutation: DELETE_NOTE,
+      variables: { id },
+    });
+
+    if (result.errors) throw new Error();
+  } catch (error) {
+    return { status: false };
+  }
+
+  revalidatePath('/notes');
+  revalidatePath('/notes/[id]', 'page');
+
+  if (options?.redirect) redirect(options.redirect);
+
+  return { status: true };
+}

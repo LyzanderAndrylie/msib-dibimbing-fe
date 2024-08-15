@@ -2,6 +2,7 @@ import ButtonLink from '@/components/ButtonLink';
 import { getNote } from '@/lib/data';
 import { format } from 'date-fns';
 import { IoChevronBackOutline } from 'react-icons/io5';
+import DeleteNoteModal from '@/components/notes/DeleteNoteModal';
 
 type PageProps = {
   params: {
@@ -20,7 +21,7 @@ export default async function Page({ params: { id } }: Readonly<PageProps>) {
           Back
         </ButtonLink>
       </div>
-      <div className="flex flex-1 flex-col items-center">
+      <div className="flex flex-1 flex-col items-center justify-center">
         {errors && (
           <div className="text-center text-xl text-slate-600">
             Error occurred while fetching the note 😔. Make sure the ID is
@@ -33,7 +34,17 @@ export default async function Page({ params: { id } }: Readonly<PageProps>) {
               <h1 className="text-2xl font-bold">{data.note.title}</h1>
               {format(new Date(data.note.createdAt), 'MMMM d, yyyy')}
             </div>
-            <p className="overflow-y-auto text-slate-600">{data.note.body}</p>
+            <p className="flex-1 overflow-y-auto text-slate-600">
+              {data.note.body}
+            </p>
+            <div>
+              <DeleteNoteModal
+                id={id}
+                title={data.note.title}
+                redirect="/notes"
+                size="md"
+              />
+            </div>
           </div>
         )}
       </div>
